@@ -21,7 +21,7 @@ Docker and Go are the only requirements; nothing opens on your screen.
 
 ```sh
 D2LIVE_SRC=../d2-live ./record.sh            # every scene
-D2LIVE_SRC=../d2-live ./record.sh hero rename # some of them
+D2LIVE_SRC=../d2-live ./record.sh edit       # some of them
 ```
 
 Videos land in `videos/` as `NAME.mp4` with a poster `NAME.jpg`.

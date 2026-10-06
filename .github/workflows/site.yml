@@ -51,7 +51,7 @@ jobs:
           cache-dependency-path: d2-live/go.sum
 
       - name: Record
-        run: D2LIVE_SRC=d2-live ./record.sh hero
+        run: D2LIVE_SRC=d2-live ./record.sh
 
       - name: Assemble
         run: |

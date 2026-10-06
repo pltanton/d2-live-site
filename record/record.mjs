@@ -76,6 +76,11 @@ function encode(raw, base) {
 }
 
 const wanted = process.argv.slice(2);
+const unknown = wanted.filter((w) => !scenes.some((s) => s.name === w));
+if (unknown.length) {
+  console.error(`no such scene: ${unknown.join(', ')} (have: ${scenes.map((s) => s.name).join(', ')})`);
+  process.exit(2);
+}
 try {
   for (const scene of scenes) {
     if (wanted.length && !wanted.includes(scene.name)) continue;
