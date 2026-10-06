@@ -9,17 +9,16 @@
 <meta property="og:url" content="https://d2-live.pltanton.dev/">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23232136'/%3E%3Crect x='6' y='7' width='12' height='8' rx='2' fill='none' stroke='%23c4a7e7' stroke-width='2'/%3E%3Crect x='14' y='18' width='12' height='8' rx='2' fill='none' stroke='%239ccfd8' stroke-width='2' stroke-dasharray='3 2'/%3E%3Cpath d='M12 15v7h2' stroke='%23c4a7e7' stroke-width='2' fill='none'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=4">
 <script>try { const t = localStorage.theme; if (t) document.documentElement.dataset.theme = t; } catch {}</script>
-<script defer src="app.js?v=2"></script>
+<script defer src="app.js?v=3"></script>
 
 <p class="early"><b>Early version.</b> Edit mode is new: expect rough edges, and tell us about them on <a href="https://github.com/pltanton/d2-live/issues">GitHub</a>.</p>
 
 <header>
   <a class="brand" href="#top"><i class="mark"></i>d2-live</a>
   <nav>
-    <a href="#story">How it works</a>
-    <a href="#live">See it live</a>
+    <a href="#scope">What it edits</a>
     <a href="#install">Install</a>
     <a class="star" href="https://github.com/pltanton/d2-live" aria-label="d2-live on GitHub"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>Star<span class="count" hidden></span></a>
     <button class="theme" aria-label="Switch theme"><svg viewBox="0 0 16 16" width="14" height="14"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
@@ -29,61 +28,72 @@
 <main>
 
 <section class="hero" id="top">
-  <p class="eyebrow">D2 · state machines · any editor</p>
-  <h1>Draw it.<br>Watch the code <em>change.</em></h1>
-  <p class="lede">A live preview for <a href="https://d2lang.com">D2</a> diagrams that you can also edit. Click a state, rename it, wire a transition — the <code>.d2</code> file changes by exactly those lines, and stays yours to edit by hand.</p>
-  <p class="cta"><a class="btn primary" href="#install">Install</a> <a class="btn" href="#story">How it works ↓</a></p>
+  <div class="pitch">
+    <p class="eyebrow">D2 · state machines · any editor</p>
+    <h1>Draw it.<br>Watch the code <em>change.</em></h1>
+    <p class="lede">A live preview for <a href="https://d2lang.com">D2</a> diagrams that you can also edit. Whatever writes the <code>.d2</code> file, the picture follows; press <kbd>E</kbd> and the picture writes back — by exactly the lines you changed.</p>
+    <p class="cta"><a class="btn primary" href="#install">Install</a> <a class="btn" href="https://github.com/pltanton/d2-live">GitHub</a></p>
+  </div>
+  <figure class="win"><figcaption><i></i><i></i><i></i><span>the file changes, the tab follows</span></figcaption><video data-src="videos/hero" muted playsinline loop preload="none"></video></figure>
 </section>
 
-<section class="story" id="story">
-  <div class="steps"></div>
-  <div class="stage" aria-hidden="true">
-    <div class="code">
-      <div class="bar"><span>order-fsm.d2</span><span class="delta"></span></div>
-      <ol></ol>
+<section class="scope" id="scope">
+  <h2>What edit mode handles</h2>
+  <div class="two">
+    <div>
+      <h3>By clicking</h3>
+      <p>Diagrams made of top-level shapes and arrows — state machines, flowcharts, simple architecture boxes:</p>
+      <ul>
+        <li>select a shape or an arrow and jump to its code</li>
+        <li>rename, with every reference following</li>
+        <li>label (markdown stays markdown), class, shape, style</li>
+        <li>add shapes and arrows, reverse, delete</li>
+        <li>the <code>#</code> comment above a declaration</li>
+        <li>class definitions in <code>classes:</code></li>
+      </ul>
     </div>
-    <div class="picture"><div class="frame"></div></div>
-  </div>
-  <noscript><p>The walkthrough needs JavaScript; the recording below shows the same.</p></noscript>
-</section>
-
-<section class="live" id="live">
-  <p class="eyebrow">See it live</p>
-  <h2>The real thing, at real speed</h2>
-  <figure class="win"><figcaption><i></i><i></i><i></i><span>127.0.0.1 · order-fsm.d2</span></figcaption><video data-src="videos/hero" muted playsinline loop preload="none"></video></figure>
-  <p class="note">Something else writes the file, the tab follows; then a state is renamed from the inspector.</p>
-</section>
-
-<section class="facts">
-  <div class="fact">
-    <h3>Fast</h3>
-    <p>Layout and rendering run in-process with a warm ELK: a redraw of a 12-state machine takes about a quarter of a second, and panning moves a ready picture instead of repainting every label.</p>
-  </div>
-  <div class="fact">
-    <h3>One server, every diagram</h3>
-    <p>The first <code>d2-live</code> becomes the server, later calls add files to it. Point it at a directory and every <code>*.d2</code> lands in the tab's file list.</p>
-  </div>
-  <div class="fact">
-    <h3>Opens from your editor</h3>
-    <p>Attach <code>d2-live --lsp</code> as a language server: opening a <code>.d2</code> opens its preview, closing the editor stops the server.</p>
-  </div>
-  <div class="fact">
-    <h3>The file stays the truth</h3>
-    <p>Typing previews without saving until <kbd>⌘S</kbd>. Edits from elsewhere stream in; if one races your unsaved typing, you choose whose wins.</p>
+    <div>
+      <h3>In the code panel</h3>
+      <p>Everything D2 can draw previews live, and anything can be edited as text, with the picture following as you type. Clicking does not change these yet:</p>
+      <ul>
+        <li>shapes inside containers</li>
+        <li>chains like <code>a -&gt; b -&gt; c</code></li>
+        <li>sequence diagrams, layers, imports, globs</li>
+      </ul>
+    </div>
   </div>
 </section>
 
 <section class="install" id="install">
   <h2>Install</h2>
-  <pre>nix profile install github:pltanton/d2-live</pre>
-  <p>Then open a diagram, or a whole directory of them, and press <kbd>E</kbd> in the tab:</p>
-  <pre>d2-live docs/diagrams</pre>
-  <p class="small">SVG rendering is built in; PNG export uses the <code>d2</code> CLI when it is installed. Editor setup and the rest are in the <a href="https://github.com/pltanton/d2-live#readme">README</a>.</p>
+  <div class="three">
+    <div>
+      <h3>Nix</h3>
+      <pre>nix profile install github:pltanton/d2-live</pre>
+      <p>Update: <code>nix profile upgrade d2-live</code><br>Remove: <code>nix profile remove d2-live</code></p>
+    </div>
+    <div>
+      <h3>NixOS · home-manager</h3>
+<pre>inputs.d2-live.url = "github:pltanton/d2-live";
+
+environment.systemPackages = [
+  inputs.d2-live.packages.${pkgs.stdenv.hostPlatform.system}.default
+];</pre>
+      <p>Update with <code>nix flake update d2-live</code>.</p>
+    </div>
+    <div>
+      <h3>Anywhere with Go 1.25+</h3>
+      <pre>go install github.com/pltanton/d2-live@latest</pre>
+      <p>Update: the same command.<br>Remove: <code>rm "$(go env GOPATH)/bin/d2-live"</code></p>
+    </div>
+  </div>
+  <h3>Then</h3>
+  <pre>d2-live diagram.d2      # or a directory of them</pre>
+  <p>A tab opens with the live preview; press <kbd>E</kbd> to edit. The preview renders in-process — the <a href="https://d2lang.com/tour/install">d2 CLI</a> is only needed for PNG export and the <code>tala</code> layout engine. Editor integration and the rest are in the <a href="https://github.com/pltanton/d2-live#readme">README</a>.</p>
 </section>
 
 </main>
 
 <footer>
-  <p>The walkthrough is built from d2-live's own edit operations and renderer; the recording runs the real tool in a scripted browser.</p>
-  <p><a href="https://github.com/pltanton/d2-live">GitHub</a></p>
+  <p><a href="https://github.com/pltanton/d2-live">github.com/pltanton/d2-live</a></p>
 </footer>

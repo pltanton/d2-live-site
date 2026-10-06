@@ -53,11 +53,6 @@ jobs:
       - name: Record
         run: D2LIVE_SRC=d2-live ./record.sh hero
 
-      - name: Story
-        run: |
-          (cd d2-live && go build -o "$RUNNER_TEMP/d2-live" .)
-          D2LIVE="$RUNNER_TEMP/d2-live" node build/story.mjs
-
       - name: Assemble
         run: |
           rm -rf site/videos

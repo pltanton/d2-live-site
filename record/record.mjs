@@ -69,7 +69,7 @@ function encode(raw, base) {
     const r = spawnSync('ffmpeg', ['-loglevel', 'error', '-y', '-i', raw, ...args], { stdio: 'inherit' });
     if (r.status !== 0) throw new Error(`ffmpeg failed for ${base}`);
   };
-  run('-vf', 'scale=1600:-2', '-c:v', 'libx264', '-crf', '26', '-preset', 'slow', '-pix_fmt', 'yuv420p',
+  run('-vf', 'scale=1600:-2', '-c:v', 'libx264', '-crf', '26', '-preset', 'medium', '-pix_fmt', 'yuv420p',
     '-movflags', '+faststart', '-an', `${base}.mp4`);
   run('-ss', '0.8', '-frames:v', '1', '-vf', 'scale=1600:-2', '-q:v', '4', `${base}.jpg`);
   rmSync(raw);
@@ -84,9 +84,9 @@ try {
     const page = await browser.newPage();
     await page.evaluateOnNewDocument(overlay);
     await page.evaluateOnNewDocument(() => localStorage.setItem('d2-live:panel-width', '400'));
-    const url = `http://127.0.0.1:${port}/?file=${encodeURIComponent(file)}${scene.edit ? '&edit=1' : ''}`;
+    const url = `http://127.0.0.1:${port}/?file=${encodeURIComponent(file)}&edit=1`;
     await page.goto(url, { waitUntil: 'load' });
-    await page.waitForSelector(scene.edit ? '.cm-content' : '#scene svg');
+    await page.waitForSelector('.cm-content');
     await new Promise((r) => setTimeout(r, 1200));
     const raw = join(out, `${scene.name}.raw.webm`);
     const recorder = await page.screencast({ path: raw });

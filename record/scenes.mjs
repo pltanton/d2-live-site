@@ -95,118 +95,112 @@ function edit(file, fn) {
   writeFileSync(file, fn(readFileSync(file, 'utf8')));
 }
 
+const connectButton = '.d2l-mini > button[title^="Connect"]';
+
 export const scenes = [
   {
     name: 'hero',
-    edit: true,
     async run(page, {file}) {
-      mouse = {x: 900, y: 600};
-      await sleep(1200);
+      mouse = {x: 1500, y: 900};
+      await sleep(900);
       edit(file, (s) => s.replace('CANCELLED: {class: done_bad}',
         'CANCELLED: {class: done_bad}\nRETURN_REQUESTED: "RETURN_REQUESTED\\nwaits for the parcel back" {class: pause}'));
-      await settle(page, 1300);
+      await settle(page, 1000);
       edit(file, (s) => s + 'COMPLETED -> RETURN_REQUESTED: "customer: RETURN" {class: evt}\nRETURN_REQUESTED -> CANCELLED: "parcel: RECEIVED" {class: evt}\n');
       await settle(page, 900);
       await page.keyboard.press('f');
-      await sleep(1300);
-      await clickId(page, 'RETURN_REQUESTED', 900);
       await sleep(1100);
-      await clickSel(page, '[data-focus="id"]', 700);
-      await combo(page, 'a');
-      await sleep(250);
-      await type(page, 'RETURNING', 70);
-      await sleep(300);
-      await page.keyboard.press('Enter');
+      edit(file, (s) => s.replace('"payment: DECLINED"', '"payment: DECLINED\\nor TIMED_OUT"'));
       await settle(page, 2200);
     },
   },
   {
     name: 'select',
-    edit: true,
     async run(page) {
-      mouse = {x: 820, y: 640};
-      await sleep(700);
+      mouse = {x: 820, y: 700};
+      await sleep(400);
       await clickId(page, 'PAYMENT_PENDING');
-      await sleep(1500);
+      await sleep(1300);
       await clickId(page, '(PAYMENT_CAPTURED -> SHIPPED)[0]');
-      await sleep(1500);
-      await clickId(page, 'CANCELLED');
-      await sleep(1500);
-      await clickText(page, '.cm-line', 'SHIPPED: {class: active}');
-      await sleep(1500);
-      await clickText(page, '.cm-line', 'CART_LOCKED -> PAYMENT_PENDING');
-      await sleep(1700);
-      await page.keyboard.press('Escape');
-      await sleep(600);
+      await sleep(1300);
+      await clickText(page, '.cm-line', 'CANCELLED: {class: done_bad}');
+      await sleep(1600);
     },
   },
   {
-    name: 'diagram',
-    edit: true,
+    name: 'rename',
     async run(page) {
-      mouse = {x: 820, y: 640};
-      await sleep(600);
+      mouse = {x: 820, y: 700};
+      await sleep(300);
+      await clickId(page, 'PAYMENT_CAPTURED');
+      await sleep(700);
+      await clickSel(page, '[data-focus="id"]', 600);
+      await combo(page, 'a');
+      await type(page, 'PAID', 90);
+      await sleep(250);
+      await page.keyboard.press('Enter');
+      await settle(page, 1800);
+    },
+  },
+  {
+    name: 'restyle',
+    async run(page) {
+      mouse = {x: 820, y: 700};
+      await sleep(300);
       await clickId(page, 'SHIPPED');
-      await sleep(900);
+      await sleep(700);
       await clickSel(page, '.d2l-mini-class');
       await sleep(700);
       await clickText(page, '.d2l-menu button', 'pause');
-      await settle(page, 900);
-      await clickSel(page, '.d2l-mini > button[title^="Connect"]', 700);
-      await sleep(900);
-      await clickId(page, 'CANCELLED', 900);
-      await sleep(700);
-      await type(page, 'carrier: LOST', 65);
-      await combo(page, 'Enter');
-      await settle(page, 1200);
-      await clickId(page, 'SHIPPED');
-      await sleep(700);
-      await clickSel(page, '.d2l-mini > button[title^="Connect"]', 700);
-      await sleep(700);
-      const p = await at(page, 'COMPLETED');
-      await click(page, p.x - 170, p.y + 40, 800);
-      await sleep(700);
-      await type(page, 'RETURNED', 70);
-      await page.keyboard.press('Enter');
-      await settle(page, 2000);
-    },
-  },
-  {
-    name: 'code',
-    edit: true,
-    async run(page) {
-      mouse = {x: 1000, y: 500};
-      await clickText(page, '.cm-line', 'SHIPPED -> COMPLETED');
-      await page.keyboard.press('End');
-      await sleep(500);
-      await type(page, '\nPAYMENT_CAPTURED -> ON_HOLD: ', 55);
-      await sleep(1500);
-      await type(page, '"fraud check" {class: evt}', 55);
-      await sleep(1200);
-      await type(page, '\nON_HOLD -> SHIPPED: "cleared" {class: evt}', 50);
-      await sleep(1600);
-      await combo(page, 's');
-      await settle(page, 2200);
-    },
-  },
-  {
-    name: 'external',
-    edit: true,
-    async run(page, {file}) {
-      mouse = {x: 820, y: 640};
-      await sleep(500);
-      await clickId(page, 'PAYMENT_PENDING');
-      await sleep(1300);
-      edit(file, (s) => s.replace('"PAYMENT_PENDING\\nwaits for the card network"', '"PAYMENT_PENDING\\nwaits for the card network (3DS)"'));
       await settle(page, 1800);
+    },
+  },
+  {
+    name: 'connect',
+    async run(page) {
+      mouse = {x: 820, y: 700};
+      await sleep(300);
+      await clickId(page, 'SHIPPED');
+      await sleep(600);
+      await clickSel(page, connectButton, 600);
+      await sleep(500);
+      await clickId(page, 'CANCELLED', 900);
+      await sleep(400);
+      await type(page, 'carrier: LOST', 60);
+      await combo(page, 'Enter');
+      await settle(page, 1800);
+    },
+  },
+  {
+    name: 'grow',
+    async run(page) {
+      mouse = {x: 820, y: 700};
+      await sleep(300);
+      await clickId(page, 'COMPLETED');
+      await sleep(600);
+      await clickSel(page, connectButton, 600);
+      await sleep(500);
+      const p = await at(page, 'COMPLETED');
+      await click(page, p.x + 150, p.y + 10, 800);
+      await sleep(600);
+      await type(page, 'RETURNED', 80);
+      await page.keyboard.press('Enter');
+      await settle(page, 1800);
+    },
+  },
+  {
+    name: 'type',
+    async run(page) {
+      mouse = {x: 1100, y: 600};
       await clickText(page, '.cm-line', 'SHIPPED -> COMPLETED');
       await page.keyboard.press('End');
-      await type(page, '\n# carriers report within a day', 45);
-      await sleep(500);
-      edit(file, (s) => s + 'COMPLETED -> CART_LOCKED: "reorder" {class: sync}\n');
-      await sleep(1800);
-      await clickText(page, '.d2l-banner button', 'Keep mine', 800);
-      await settle(page, 2200);
+      await sleep(300);
+      await type(page, '\nPAYMENT_CAPTURED -> ON_HOLD: "fraud check" {class: evt}', 45);
+      await sleep(900);
+      await type(page, '\nON_HOLD -> SHIPPED: "cleared" {class: evt}', 45);
+      await sleep(900);
+      await combo(page, 's');
+      await settle(page, 1500);
     },
   },
 ];
