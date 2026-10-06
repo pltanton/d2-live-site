@@ -9,9 +9,9 @@
 <meta property="og:url" content="https://d2-live.pltanton.dev/">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23232136'/%3E%3Crect x='6' y='7' width='12' height='8' rx='2' fill='none' stroke='%23c4a7e7' stroke-width='2'/%3E%3Crect x='14' y='18' width='12' height='8' rx='2' fill='none' stroke='%239ccfd8' stroke-width='2' stroke-dasharray='3 2'/%3E%3Cpath d='M12 15v7h2' stroke='%23c4a7e7' stroke-width='2' fill='none'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="style.css?v=9">
 <script>try { const t = localStorage.theme; if (t) document.documentElement.dataset.theme = t; } catch {}</script>
-<script defer src="app.js?v=5"></script>
+<script defer src="app.js?v=6"></script>
 
 <p class="early"><b>Early version.</b> Edit mode is new: expect rough edges, and tell us about them on <a href="https://github.com/pltanton/d2-live/issues">GitHub</a>.</p>
 
@@ -82,43 +82,63 @@
 </section>
 
 <section class="install" id="install">
-  <h2>Install</h2>
-  <div class="three">
-    <div>
-      <h3>Nix</h3>
-      <pre>nix profile install github:pltanton/d2-live</pre>
-      <p>Update: <code>nix profile upgrade d2-live</code><br>Remove: <code>nix profile remove d2-live</code></p>
+  <div class="intro">
+    <h2>Install</h2>
+    <p>One binary, nothing else to run. Pick how you install things.</p>
+  </div>
+  <div class="card">
+    <div class="seg" role="tablist">
+      <button type="button" role="tab" class="on" data-tab="nix">Nix</button>
+      <button type="button" role="tab" data-tab="nixos">NixOS</button>
+      <button type="button" role="tab" data-tab="go">Go</button>
+      <button type="button" role="tab" data-tab="agent">Agent skill</button>
     </div>
-    <div>
-      <h3>NixOS · home-manager</h3>
-<pre>inputs.d2-live.url = "github:pltanton/d2-live";
 
+    <div class="pane on" data-pane="nix">
+      <pre><code>nix profile install github:pltanton/d2-live</code></pre>
+      <dl>
+        <dt>Update</dt><dd><code>nix profile upgrade d2-live</code></dd>
+        <dt>Remove</dt><dd><code>nix profile remove d2-live</code></dd>
+      </dl>
+    </div>
+
+    <div class="pane" data-pane="nixos">
+      <pre><code># flake.nix
+inputs.d2-live.url = "github:pltanton/d2-live";
+
+# configuration.nix or home.nix
 environment.systemPackages = [
   inputs.d2-live.packages.${pkgs.stdenv.hostPlatform.system}.default
-];</pre>
-      <p>Update with <code>nix flake update d2-live</code>.</p>
+];</code></pre>
+      <dl>
+        <dt>Update</dt><dd><code>nix flake update d2-live</code></dd>
+        <dt>Remove</dt><dd>drop the input and the package</dd>
+      </dl>
     </div>
-    <div>
-      <h3>Anywhere with Go 1.25+</h3>
-      <pre>go install github.com/pltanton/d2-live@latest</pre>
-      <p>Update: the same command.<br>Remove: <code>rm "$(go env GOPATH)/bin/d2-live"</code></p>
-    </div>
-  </div>
-  <h3>Then</h3>
-  <pre>d2-live diagram.d2      # or a directory of them</pre>
-  <p>A tab opens with the live preview; press <kbd>E</kbd> to edit. Rendering and PNG export happen inside d2-live; the <a href="https://d2lang.com/tour/install">d2 CLI</a> is only needed for the <code>tala</code> layout engine and for PNGs of diagrams with markdown labels. Editor integration and the rest are in the <a href="https://github.com/pltanton/d2-live#readme">README</a>.</p>
-</section>
 
-<section class="agent" id="agent">
-  <h2>Agent plugin</h2>
-  <div class="two">
-    <div>
-      <p>A <code>d2-live</code> skill teaches a coding agent to work with the preview: register the diagrams it writes, hand you the link, check they compile, and re-read the file before editing — you may be changing it in the tab. The repository is a plugin marketplace; in Claude Code:</p>
+    <div class="pane" data-pane="go">
+      <pre><code>go install github.com/pltanton/d2-live@latest</code></pre>
+      <dl>
+        <dt>Update</dt><dd>run the same command</dd>
+        <dt>Remove</dt><dd><code>rm "$(go env GOPATH)/bin/d2-live"</code></dd>
+      </dl>
+      <p class="hint">Needs Go 1.25 or newer.</p>
     </div>
-    <div>
-<pre>/plugin marketplace add pltanton/d2-live
-/plugin install d2-live@d2-live</pre>
-      <p>Update: <code>/plugin marketplace update d2-live</code><br>Remove: <code>/plugin uninstall d2-live@d2-live</code></p>
+
+    <div class="pane" data-pane="agent">
+      <pre><code>/plugin marketplace add pltanton/d2-live
+/plugin install d2-live@d2-live</code></pre>
+      <dl>
+        <dt>Update</dt><dd><code>/plugin marketplace update d2-live</code></dd>
+        <dt>Remove</dt><dd><code>/plugin uninstall d2-live@d2-live</code></dd>
+      </dl>
+      <p class="hint">A skill for coding agents (commands above are Claude Code's): it registers the diagrams the agent writes with your running d2-live, hands you the preview link and re-reads a file before editing it.</p>
+    </div>
+
+    <div class="run">
+      <span>Run</span>
+      <pre><code>d2-live diagram.d2</code></pre>
+      <p class="hint">A file or a directory of them. A tab opens; press <kbd>E</kbd> to edit. The <a href="https://d2lang.com/tour/install">d2 CLI</a> is optional: only the <code>tala</code> layout and PNGs of diagrams with markdown labels use it. More in the <a href="https://github.com/pltanton/d2-live#readme">README</a>.</p>
     </div>
   </div>
 </section>

@@ -82,7 +82,6 @@ h1 em { font-family: ui-serif, Georgia, serif; font-weight: 500; color: var(--ac
 .win figcaption span { margin-left: 10px; }
 .win video { display: block; width: 100%; aspect-ratio: 1360 / 820; background: #dcdfe5; cursor: pointer; }
 
-.features, .install, .agent { padding: 64px 0 24px; }
 .features { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
 .group { padding: 28px 30px; border-radius: 16px; background: var(--raise); border: 1px solid var(--line); }
 .group h2 { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; font-size: 26px; letter-spacing: -0.02em; }
@@ -91,18 +90,14 @@ h1 em { font-family: ui-serif, Georgia, serif; font-weight: 500; color: var(--ac
 .group li { color: var(--soft); padding-left: 18px; position: relative; }
 .group li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 7px; height: 7px; border-radius: 2px; background: var(--accent); }
 .group li b { color: var(--ink); }
-.install h2, .agent h2 { margin: 0 0 28px; font-size: clamp(28px, 3vw, 42px); letter-spacing: -0.03em; }
 h3 { margin: 0 0 8px; font-size: 19px; letter-spacing: -0.01em; }
-.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
-.three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin-bottom: 32px; }
-.install p, .agent p { color: var(--soft); margin: 0 0 12px; }
 
-pre { margin: 0 0 12px; padding: 14px 16px; border-radius: 10px; overflow-x: auto; background: var(--code-bg); color: var(--code-ink); font-size: 14px; user-select: all; }
+pre { margin: 0; padding: 14px 16px; border-radius: 10px; overflow-x: auto; background: var(--code-bg); color: var(--code-ink); font-size: 14px; user-select: all; }
 
 
 @media (max-width: 980px) {
   .hero { grid-template-columns: minmax(0, 1fr); min-height: 0; }
-  .two, .three, .features { grid-template-columns: minmax(0, 1fr); }
+  .features, .install { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 560px) {
   nav a:not(.star) { display: none; }
@@ -110,7 +105,6 @@ pre { margin: 0 0 12px; padding: 14px 16px; border-radius: 10px; overflow-x: aut
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
-.three pre { font-size: 12.5px; }
 
 .carousel .screen { position: relative; aspect-ratio: 1360 / 820; background: #dcdfe5; }
 .carousel .screen video { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 520ms ease; }
@@ -131,3 +125,31 @@ pre { margin: 0 0 12px; padding: 14px 16px; border-radius: 10px; overflow-x: aut
   transition: width 320ms ease, background 320ms ease;
 }
 .dots button.on { width: 28px; background: var(--accent); }
+
+.features, .install { padding: 64px 0 24px; }
+.install { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(24px, 4vw, 64px); align-items: start; }
+.install .intro p { color: var(--soft); margin: 0; font-size: 18px; }
+.install h2 { margin: 0 0 12px; font-size: clamp(28px, 3vw, 42px); letter-spacing: -0.03em; }
+.card { padding: 22px; border-radius: 18px; background: var(--raise); border: 1px solid var(--line); }
+.seg { display: inline-flex; gap: 4px; padding: 4px; margin-bottom: 18px; border-radius: 12px; background: var(--canvas); }
+.seg button {
+  border: 0; border-radius: 9px; padding: 7px 14px; background: transparent; color: var(--soft);
+  font: 600 14px ui-sans-serif, system-ui, sans-serif; cursor: pointer;
+}
+.seg button.on { background: var(--raise); color: var(--ink); box-shadow: 0 1px 3px rgba(20, 22, 40, 0.12); }
+.pane { display: none; }
+.pane.on { display: block; }
+.card pre { position: relative; padding: 14px 52px 14px 16px; font-size: 14px; line-height: 1.6; }
+.card pre code { background: none; padding: 0; font-size: inherit; color: inherit; }
+.copy {
+  position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; display: grid; place-items: center;
+  border: 0; border-radius: 8px; background: rgba(224, 222, 244, 0.08); color: #908caa; cursor: pointer;
+}
+.copy:hover { background: rgba(224, 222, 244, 0.16); color: #e0def4; }
+.copy svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.card dl { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 8px 12px; margin: 14px 2px 0; align-items: baseline; }
+.card dt { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.card dd { margin: 0; color: var(--soft); font-size: 15px; }
+.hint { margin: 12px 2px 0; font-size: 14.5px; color: var(--muted); }
+.run { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+.run > span { display: block; margin: 0 2px 8px; font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
