@@ -9,18 +9,17 @@
 <meta property="og:url" content="https://d2-live.pltanton.dev/">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23232136'/%3E%3Crect x='6' y='7' width='12' height='8' rx='2' fill='none' stroke='%23c4a7e7' stroke-width='2'/%3E%3Crect x='14' y='18' width='12' height='8' rx='2' fill='none' stroke='%239ccfd8' stroke-width='2' stroke-dasharray='3 2'/%3E%3Cpath d='M12 15v7h2' stroke='%23c4a7e7' stroke-width='2' fill='none'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=7">
 <script>try { const t = localStorage.theme; if (t) document.documentElement.dataset.theme = t; } catch {}</script>
-<script defer src="app.js?v=3"></script>
+<script defer src="app.js?v=4"></script>
 
 <p class="early"><b>Early version.</b> Edit mode is new: expect rough edges, and tell us about them on <a href="https://github.com/pltanton/d2-live/issues">GitHub</a>.</p>
 
 <header>
   <a class="brand" href="#top"><i class="mark"></i>d2-live</a>
   <nav>
-    <a href="#scope">What it edits</a>
+    <a href="#features">Features</a>
     <a href="#install">Install</a>
-    <a href="#agent">Claude Code</a>
     <a class="star" href="https://github.com/pltanton/d2-live" aria-label="d2-live on GitHub"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>Star<span class="count" hidden></span></a>
     <button class="theme" aria-label="Switch theme"><svg viewBox="0 0 16 16" width="14" height="14"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
   </nav>
@@ -35,33 +34,47 @@
     <p class="lede">A live preview for <a href="https://d2lang.com">D2</a> diagrams that you can also edit. Whatever writes the <code>.d2</code> file, the picture follows; press <kbd>E</kbd> and the picture writes back — by exactly the lines you changed.</p>
     <p class="cta"><a class="btn primary" href="#install">Install</a> <a class="btn" href="https://github.com/pltanton/d2-live">GitHub</a></p>
   </div>
-  <figure class="win"><figcaption><i></i><i></i><i></i><span>the file changes, the tab follows</span></figcaption><video data-src="videos/hero" muted playsinline loop preload="none"></video></figure>
+  <figure class="win carousel">
+    <figcaption>
+      <i></i><i></i><i></i>
+      <span class="tabs">
+        <button type="button" class="on"><b>View</b><u></u></button>
+        <button type="button"><b>Export</b><u></u></button>
+        <button type="button"><b>Edit</b><u></u></button>
+      </span>
+    </figcaption>
+    <div class="screen">
+      <video data-src="videos/view" muted playsinline preload="none" class="on"></video>
+      <video data-src="videos/export" muted playsinline preload="none"></video>
+      <video data-src="videos/edit" muted playsinline preload="none"></video>
+    </div>
+    <p class="caption">The file changes and the picture redraws. Pan, zoom, switch the layout engine or sketch mode on the fly.</p>
+    <p class="caption" hidden>Copy the diagram as a PNG or an SVG straight into a doc or a chat, or download it.</p>
+    <p class="caption" hidden>Press <kbd>E</kbd>: click a state, connect it to another, rename it — the code next to it changes with you.</p>
+  </figure>
 </section>
 
-<section class="scope" id="scope">
-  <h2>What edit mode handles</h2>
-  <div class="two">
-    <div>
-      <h3>By clicking</h3>
-      <p>Diagrams made of top-level shapes and arrows — state machines, flowcharts, simple architecture boxes:</p>
-      <ul>
-        <li>select a shape or an arrow and jump to its code</li>
-        <li>rename, with every reference following</li>
-        <li>label (markdown stays markdown), class, shape, style</li>
-        <li>add shapes and arrows, reverse, delete</li>
-        <li>the <code>#</code> comment above a declaration</li>
-        <li>class definitions in <code>classes:</code></li>
-      </ul>
-    </div>
-    <div>
-      <h3>In the code panel</h3>
-      <p>Everything D2 can draw previews live, and anything can be edited as text, with the picture following as you type. Clicking does not change these yet:</p>
-      <ul>
-        <li>shapes inside containers</li>
-        <li>chains like <code>a -&gt; b -&gt; c</code></li>
-        <li>sequence diagrams, layers, imports, globs</li>
-      </ul>
-    </div>
+<section class="features" id="features">
+  <div class="group">
+    <h2>Viewer</h2>
+    <ul>
+      <li><b>Live</b> — redraws whenever the file changes, whoever wrote it</li>
+      <li><b>One server</b> — open a file or a whole directory; switch files in the tab</li>
+      <li><b>Layouts and sketch</b> — ELK, dagre or tala and hand-drawn mode, switched in place</li>
+      <li><b>Pan and zoom</b> — position kept across redraws; <kbd>F</kbd> fits to screen</li>
+      <li><b>Export</b> — copy or download PNG and SVG</li>
+      <li><b>From your editor</b> — opens with the file via <code>d2-live --lsp</code></li>
+    </ul>
+  </div>
+  <div class="group">
+    <h2>Edit mode <kbd>E</kbd></h2>
+    <ul>
+      <li><b>Basic editing by clicking</b> for diagrams of shapes and arrows — state machines, flowcharts: rename, label, class, shape, style, connect, add, reverse, delete, comments</li>
+      <li><b>Code panel</b> — click a shape to see its code, a line to see its shape; type and the picture follows, <kbd>⌘S</kbd> saves</li>
+      <li><b>Minimal diffs</b> — only the lines you touched change</li>
+      <li><b>Undo</b>, and a choice when someone else edits the file at the same time</li>
+      <li>Containers, chains and sequence diagrams preview live and edit as code</li>
+    </ul>
   </div>
 </section>
 
@@ -90,26 +103,21 @@ environment.systemPackages = [
   </div>
   <h3>Then</h3>
   <pre>d2-live diagram.d2      # or a directory of them</pre>
-  <p>A tab opens with the live preview; press <kbd>E</kbd> to edit. The preview renders in-process — the <a href="https://d2lang.com/tour/install">d2 CLI</a> is only needed for PNG export and the <code>tala</code> layout engine. Editor integration and the rest are in the <a href="https://github.com/pltanton/d2-live#readme">README</a>.</p>
+  <p>A tab opens with the live preview; press <kbd>E</kbd> to edit. Rendering and PNG export happen inside d2-live; the <a href="https://d2lang.com/tour/install">d2 CLI</a> is only needed for the <code>tala</code> layout engine and for PNGs of diagrams with markdown labels. Editor integration and the rest are in the <a href="https://github.com/pltanton/d2-live#readme">README</a>.</p>
 </section>
 
 <section class="agent" id="agent">
-  <h2>With Claude Code</h2>
+  <h2>Agent plugin</h2>
   <div class="two">
     <div>
-      <p>The repository is also a Claude Code plugin marketplace with a <code>d2-live</code> skill. When Claude writes or edits a diagram, it registers the file with your running d2-live and hands you the preview link instead of restarting the server on every change, checks that the diagram compiles, and re-reads the file before each edit — you may be changing it in the tab at the same time.</p>
+      <p>A <code>d2-live</code> skill teaches a coding agent to work with the preview: register the diagrams it writes, hand you the link, check they compile, and re-read the file before editing — you may be changing it in the tab. The repository is a plugin marketplace; in Claude Code:</p>
     </div>
     <div>
 <pre>/plugin marketplace add pltanton/d2-live
 /plugin install d2-live@d2-live</pre>
       <p>Update: <code>/plugin marketplace update d2-live</code><br>Remove: <code>/plugin uninstall d2-live@d2-live</code></p>
-      <p>Or link the skill from a clone instead of installing the plugin:<br><code>ln -s "$PWD/skills/d2-live" ~/.claude/skills/d2-live</code></p>
     </div>
   </div>
 </section>
 
 </main>
-
-<footer>
-  <p><a href="https://github.com/pltanton/d2-live">github.com/pltanton/d2-live</a></p>
-</footer>

@@ -7,26 +7,55 @@ document.querySelector(".theme").addEventListener("click", () => {
   try { localStorage.theme = root.dataset.theme; } catch {}
 });
 
-for (const video of document.querySelectorAll("video[data-src]")) {
-  const base = video.dataset.src;
-  video.poster = `${base}.jpg`;
-  video.src = `${base}.mp4`;
-  let held = false;
-  video.addEventListener("click", () => {
-    held = !video.paused;
-    video.paused ? video.play() : video.pause();
-  });
-  new IntersectionObserver(
-    ([e]) => {
-      if (e.isIntersecting && e.intersectionRatio >= 0.6) {
-        if (!still && !held) video.play().catch(() => {});
-      } else {
-        video.pause();
-      }
-    },
-    { threshold: [0, 0.6, 1] },
-  ).observe(video);
+const carousel = document.querySelector(".carousel");
+const tabs = [...carousel.querySelectorAll(".tabs button")];
+const videos = [...carousel.querySelectorAll("video")];
+const captions = [...carousel.querySelectorAll(".caption")];
+let current = 0;
+let seen = false;
+let held = false;
+
+for (const v of videos) {
+  v.poster = `${v.dataset.src}.jpg`;
+  v.src = `${v.dataset.src}.mp4`;
 }
+
+function select(i, play) {
+  current = i;
+  tabs.forEach((t, n) => {
+    t.classList.toggle("on", n === i);
+    t.style.setProperty("--p", "0%");
+  });
+  videos.forEach((v, n) => {
+    v.classList.toggle("on", n === i);
+    if (n !== i) v.pause();
+  });
+  captions.forEach((c, n) => (c.hidden = n !== i));
+  videos[i].currentTime = 0;
+  if (play && !still) videos[i].play().catch(() => {});
+}
+
+videos.forEach((v, i) => {
+  v.addEventListener("timeupdate", () => {
+    if (v.duration) tabs[i].style.setProperty("--p", `${(v.currentTime / v.duration) * 100}%`);
+  });
+  v.addEventListener("ended", () => {
+    if (seen && !held) select((i + 1) % videos.length, true);
+  });
+  v.addEventListener("click", () => {
+    held = !v.paused;
+    v.paused ? v.play() : v.pause();
+  });
+});
+tabs.forEach((t, i) => t.addEventListener("click", () => {
+  held = false;
+  select(i, true);
+}));
+new IntersectionObserver(([e]) => {
+  seen = e.isIntersecting && e.intersectionRatio >= 0.5;
+  if (seen && !held && !still) videos[current].play().catch(() => {});
+  else videos[current].pause();
+}, {threshold: [0, 0.5, 1]}).observe(carousel);
 
 fetch("https://api.github.com/repos/pltanton/d2-live")
   .then((r) => (r.ok ? r.json() : null))

@@ -97,110 +97,95 @@ function edit(file, fn) {
 
 const connectButton = '.d2l-mini > button[title^="Connect"]';
 
+export async function closer(page, ticks, x = 560, y = 430) {
+  await page.mouse.move(x, y);
+  for (let i = 0; i < ticks; i++) {
+    await page.mouse.wheel({deltaY: -50});
+    await sleep(60);
+  }
+  await sleep(300);
+}
+
+async function hud(page) {
+  await glide(page, ...Object.values(await selector(page, '#pill')), 700);
+  await sleep(500);
+}
+
 export const scenes = [
   {
-    name: 'hero',
+    name: 'view',
     async run(page, {file}) {
-      mouse = {x: 1500, y: 900};
-      await sleep(900);
-      edit(file, (s) => s.replace('CANCELLED: {class: done_bad}',
-        'CANCELLED: {class: done_bad}\nRETURN_REQUESTED: "RETURN_REQUESTED\\nwaits for the parcel back" {class: pause}'));
-      await settle(page, 1000);
-      edit(file, (s) => s + 'COMPLETED -> RETURN_REQUESTED: "customer: RETURN" {class: evt}\nRETURN_REQUESTED -> CANCELLED: "parcel: RECEIVED" {class: evt}\n');
-      await settle(page, 900);
+      mouse = {x: 900, y: 700};
+      await sleep(600);
+      edit(file, (s) => s.replace('SHIPPED -> COMPLETED', 'SHIPPED -> CANCELLED: "carrier: LOST" {class: evt}\nSHIPPED -> COMPLETED'));
+      await sleep(1500);
+      await hud(page);
+      await glide(page, ...Object.values(await selector(page, '#layout-select')), 450);
+      await page.mouse.down();
+      await page.mouse.up();
+      await sleep(300);
+      await page.select('#layout-select', 'dagre');
+      await sleep(1500);
+      await clickSel(page, '#panel .switch', 450);
+      await sleep(1500);
+      const p = await at(page, 'PAYMENT_PENDING');
+      await glide(page, p.x, p.y, 700);
+      for (let i = 0; i < 4; i++) {
+        await page.mouse.wheel({deltaY: -50});
+        await sleep(70);
+      }
+      await sleep(500);
+      await page.mouse.down();
+      await glide(page, p.x - 140, p.y - 160, 800);
+      await page.mouse.up();
+      await sleep(700);
       await page.keyboard.press('f');
-      await sleep(1100);
-      edit(file, (s) => s.replace('"payment: DECLINED"', '"payment: DECLINED\\nor TIMED_OUT"'));
-      await settle(page, 2200);
-    },
-  },
-  {
-    name: 'select',
-    async run(page) {
-      mouse = {x: 820, y: 700};
-      await sleep(400);
-      await clickId(page, 'PAYMENT_PENDING');
-      await sleep(1300);
-      await clickId(page, '(PAYMENT_CAPTURED -> SHIPPED)[0]');
-      await sleep(1300);
-      await clickText(page, '.cm-line', 'CANCELLED: {class: done_bad}');
       await sleep(1600);
     },
   },
   {
-    name: 'rename',
+    name: 'export',
     async run(page) {
-      mouse = {x: 820, y: 700};
-      await sleep(300);
-      await clickId(page, 'PAYMENT_CAPTURED');
-      await sleep(700);
-      await clickSel(page, '[data-focus="id"]', 600);
-      await combo(page, 'a');
-      await type(page, 'PAID', 90);
-      await sleep(250);
-      await page.keyboard.press('Enter');
-      await settle(page, 1800);
-    },
-  },
-  {
-    name: 'restyle',
-    async run(page) {
-      mouse = {x: 820, y: 700};
-      await sleep(300);
-      await clickId(page, 'SHIPPED');
-      await sleep(700);
-      await clickSel(page, '.d2l-mini-class');
-      await sleep(700);
-      await clickText(page, '.d2l-menu button', 'pause');
-      await settle(page, 1800);
-    },
-  },
-  {
-    name: 'connect',
-    async run(page) {
-      mouse = {x: 820, y: 700};
-      await sleep(300);
-      await clickId(page, 'SHIPPED');
+      mouse = {x: 900, y: 700};
       await sleep(600);
+      await hud(page);
+      await clickSel(page, '#copy-png', 600);
+      await page.waitForFunction(() => /PNG/.test(document.getElementById('toast').textContent), {timeout: 10000});
+      const toast = await page.$eval('#toast', (e) => e.textContent);
+      if (toast !== 'copied PNG') throw new Error(`export: toast says "${toast}"`);
+      await sleep(1300);
+      await clickSel(page, '#copy-svg', 500);
+      await sleep(1500);
+      await clickSel(page, '#download-png', 500);
+      await sleep(1800);
+    },
+  },
+  {
+    name: 'edit',
+    async run(page) {
+      mouse = {x: 900, y: 700};
+      await sleep(500);
+      await page.keyboard.press('e');
+      await page.waitForSelector('.cm-content', {visible: true});
+      await sleep(900);
+      await closer(page, 2, 420, 430);
+      await sleep(400);
+      await clickId(page, 'SHIPPED', 800);
+      await sleep(800);
       await clickSel(page, connectButton, 600);
       await sleep(500);
       await clickId(page, 'CANCELLED', 900);
       await sleep(400);
       await type(page, 'carrier: LOST', 60);
       await combo(page, 'Enter');
-      await settle(page, 1800);
-    },
-  },
-  {
-    name: 'grow',
-    async run(page) {
-      mouse = {x: 820, y: 700};
-      await sleep(300);
-      await clickId(page, 'COMPLETED');
+      await settle(page, 1200);
+      await clickId(page, 'PAYMENT_CAPTURED', 800);
       await sleep(600);
-      await clickSel(page, connectButton, 600);
-      await sleep(500);
-      const p = await at(page, 'COMPLETED');
-      await click(page, p.x + 150, p.y + 10, 800);
-      await sleep(600);
-      await type(page, 'RETURNED', 80);
+      await clickSel(page, '[data-focus="id"]', 600);
+      await combo(page, 'a');
+      await type(page, 'PAID', 90);
       await page.keyboard.press('Enter');
-      await settle(page, 1800);
-    },
-  },
-  {
-    name: 'type',
-    async run(page) {
-      mouse = {x: 1100, y: 600};
-      await clickText(page, '.cm-line', 'SHIPPED -> COMPLETED');
-      await page.keyboard.press('End');
-      await sleep(300);
-      await type(page, '\nPAYMENT_CAPTURED -> ON_HOLD: "fraud check" {class: evt}', 45);
-      await sleep(900);
-      await type(page, '\nON_HOLD -> SHIPPED: "cleared" {class: evt}', 45);
-      await sleep(900);
-      await combo(page, 's');
-      await settle(page, 1500);
+      await settle(page, 2000);
     },
   },
 ];

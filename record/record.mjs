@@ -9,7 +9,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
 import { overlay } from './overlay.mjs';
-import { scenes } from './scenes.mjs';
+import { closer, scenes } from './scenes.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = process.env.ROOT || resolve(here, '..');
@@ -41,7 +41,7 @@ const stop = () => {
   server.kill();
   rmSync(work, { recursive: true, force: true });
 };
-process.on('exit', stop);
+
 
 async function waitHealthy() {
   for (let i = 0; i < 100; i++) {
@@ -81,13 +81,15 @@ try {
     if (wanted.length && !wanted.includes(scene.name)) continue;
     writeFileSync(file, readFileSync(fixture));
     await new Promise((r) => setTimeout(r, 400));
+    await browser.defaultBrowserContext().overridePermissions(`http://127.0.0.1:${port}`, ['clipboard-read', 'clipboard-write', 'clipboard-sanitized-write']);
     const page = await browser.newPage();
     await page.evaluateOnNewDocument(overlay);
     await page.evaluateOnNewDocument(() => localStorage.setItem('d2-live:panel-width', '400'));
-    const url = `http://127.0.0.1:${port}/?file=${encodeURIComponent(file)}&edit=1`;
+    const url = `http://127.0.0.1:${port}/?file=${encodeURIComponent(file)}${scene.edit ? '&edit=1' : ''}`;
     await page.goto(url, { waitUntil: 'load' });
-    await page.waitForSelector('.cm-content');
+    await page.waitForSelector(scene.edit ? '.cm-content' : '#scene svg');
     await new Promise((r) => setTimeout(r, 1200));
+    if (!scene.edit) await closer(page, 2, 680, 430);
     const raw = join(out, `${scene.name}.raw.webm`);
     const recorder = await page.screencast({ path: raw });
     const t0 = Date.now();
@@ -100,6 +102,11 @@ try {
     console.log(`${scene.name}: ${((Date.now() - t0) / 1000).toFixed(1)}s`);
     await page.close();
   }
+} catch (err) {
+  console.error(err);
+  process.exitCode = 1;
 } finally {
   await browser.close();
+  stop();
+  process.exit(process.exitCode ?? 0);
 }
