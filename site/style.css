@@ -128,7 +128,7 @@ pre { margin: 0; padding: 14px 16px; border-radius: 10px; overflow-x: auto; back
 
 .features, .install { padding: 64px 0 24px; }
 .install h2 { margin: 0 0 24px; font-size: clamp(28px, 3vw, 42px); letter-spacing: -0.03em; }
-.card { max-width: 920px; padding: 22px; border-radius: 18px; background: var(--raise); border: 1px solid var(--line); }
+.card { padding: 22px; border-radius: 18px; background: var(--raise); border: 1px solid var(--line); }
 .seg { display: inline-flex; gap: 4px; padding: 4px; margin-bottom: 18px; border-radius: 12px; background: var(--canvas); }
 .seg button {
   border: 0; border-radius: 9px; padding: 7px 14px; background: transparent; color: var(--soft);
