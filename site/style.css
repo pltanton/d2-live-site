@@ -82,12 +82,12 @@ h1 em { font-family: ui-serif, Georgia, serif; font-weight: 500; color: var(--ac
 .win figcaption span { margin-left: 10px; }
 .win video { display: block; width: 100%; aspect-ratio: 1360 / 820; background: #dcdfe5; cursor: pointer; }
 
-.scope, .install { padding: 64px 0 24px; }
-.scope h2, .install h2 { margin: 0 0 28px; font-size: clamp(28px, 3vw, 42px); letter-spacing: -0.03em; }
+.scope, .install, .agent { padding: 64px 0 24px; }
+.scope h2, .install h2, .agent h2 { margin: 0 0 28px; font-size: clamp(28px, 3vw, 42px); letter-spacing: -0.03em; }
 h3 { margin: 0 0 8px; font-size: 19px; letter-spacing: -0.01em; }
 .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
 .three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin-bottom: 32px; }
-.scope p, .install p { color: var(--soft); margin: 0 0 12px; }
+.scope p, .install p, .agent p { color: var(--soft); margin: 0 0 12px; }
 .scope ul { margin: 0; padding-left: 20px; color: var(--soft); }
 .scope li { margin: 4px 0; }
 .scope li::marker { color: var(--accent); }

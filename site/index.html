@@ -9,7 +9,7 @@
 <meta property="og:url" content="https://d2-live.pltanton.dev/">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23232136'/%3E%3Crect x='6' y='7' width='12' height='8' rx='2' fill='none' stroke='%23c4a7e7' stroke-width='2'/%3E%3Crect x='14' y='18' width='12' height='8' rx='2' fill='none' stroke='%239ccfd8' stroke-width='2' stroke-dasharray='3 2'/%3E%3Cpath d='M12 15v7h2' stroke='%23c4a7e7' stroke-width='2' fill='none'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 <script>try { const t = localStorage.theme; if (t) document.documentElement.dataset.theme = t; } catch {}</script>
 <script defer src="app.js?v=3"></script>
 
@@ -20,6 +20,7 @@
   <nav>
     <a href="#scope">What it edits</a>
     <a href="#install">Install</a>
+    <a href="#agent">Claude Code</a>
     <a class="star" href="https://github.com/pltanton/d2-live" aria-label="d2-live on GitHub"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>Star<span class="count" hidden></span></a>
     <button class="theme" aria-label="Switch theme"><svg viewBox="0 0 16 16" width="14" height="14"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
   </nav>
@@ -90,6 +91,21 @@ environment.systemPackages = [
   <h3>Then</h3>
   <pre>d2-live diagram.d2      # or a directory of them</pre>
   <p>A tab opens with the live preview; press <kbd>E</kbd> to edit. The preview renders in-process — the <a href="https://d2lang.com/tour/install">d2 CLI</a> is only needed for PNG export and the <code>tala</code> layout engine. Editor integration and the rest are in the <a href="https://github.com/pltanton/d2-live#readme">README</a>.</p>
+</section>
+
+<section class="agent" id="agent">
+  <h2>With Claude Code</h2>
+  <div class="two">
+    <div>
+      <p>The repository is also a Claude Code plugin marketplace with a <code>d2-live</code> skill. When Claude writes or edits a diagram, it registers the file with your running d2-live and hands you the preview link instead of restarting the server on every change, checks that the diagram compiles, and re-reads the file before each edit — you may be changing it in the tab at the same time.</p>
+    </div>
+    <div>
+<pre>/plugin marketplace add pltanton/d2-live
+/plugin install d2-live@d2-live</pre>
+      <p>Update: <code>/plugin marketplace update d2-live</code><br>Remove: <code>/plugin uninstall d2-live@d2-live</code></p>
+      <p>Or link the skill from a clone instead of installing the plugin:<br><code>ln -s "$PWD/skills/d2-live" ~/.claude/skills/d2-live</code></p>
+    </div>
+  </div>
 </section>
 
 </main>
