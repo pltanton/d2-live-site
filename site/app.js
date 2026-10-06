@@ -8,9 +8,10 @@ document.querySelector(".theme").addEventListener("click", () => {
 });
 
 const carousel = document.querySelector(".carousel");
-const tabs = [...carousel.querySelectorAll(".tabs button")];
+const dots = [...carousel.querySelectorAll(".dots button")];
 const videos = [...carousel.querySelectorAll("video")];
-const captions = [...carousel.querySelectorAll(".caption")];
+const captions = [...carousel.querySelectorAll(".captions p")];
+const bar = carousel.querySelector(".progress i");
 let current = 0;
 let seen = false;
 let held = false;
@@ -22,32 +23,29 @@ for (const v of videos) {
 
 function select(i, play) {
   current = i;
-  tabs.forEach((t, n) => {
-    t.classList.toggle("on", n === i);
-    t.style.setProperty("--p", "0%");
-  });
-  videos.forEach((v, n) => {
-    v.classList.toggle("on", n === i);
-    if (n !== i) v.pause();
-  });
-  captions.forEach((c, n) => (c.hidden = n !== i));
+  bar.style.width = "0%";
   videos[i].currentTime = 0;
+  [dots, videos, captions].forEach((list) => list.forEach((el, n) => el.classList.toggle("on", n === i)));
+  videos.forEach((v, n) => n !== i && setTimeout(() => v.pause(), 520));
   if (play && !still) videos[i].play().catch(() => {});
 }
 
+(function tick() {
+  const v = videos[current];
+  if (v.duration) bar.style.width = `${(v.currentTime / v.duration) * 100}%`;
+  requestAnimationFrame(tick);
+})();
+
 videos.forEach((v, i) => {
-  v.addEventListener("timeupdate", () => {
-    if (v.duration) tabs[i].style.setProperty("--p", `${(v.currentTime / v.duration) * 100}%`);
-  });
   v.addEventListener("ended", () => {
-    if (seen && !held) select((i + 1) % videos.length, true);
+    if (seen && !held && i === current) select((i + 1) % videos.length, true);
   });
   v.addEventListener("click", () => {
     held = !v.paused;
     v.paused ? v.play() : v.pause();
   });
 });
-tabs.forEach((t, i) => t.addEventListener("click", () => {
+dots.forEach((d, i) => d.addEventListener("click", () => {
   held = false;
   select(i, true);
 }));

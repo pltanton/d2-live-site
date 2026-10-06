@@ -9,9 +9,9 @@
 <meta property="og:url" content="https://d2-live.pltanton.dev/">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23232136'/%3E%3Crect x='6' y='7' width='12' height='8' rx='2' fill='none' stroke='%23c4a7e7' stroke-width='2'/%3E%3Crect x='14' y='18' width='12' height='8' rx='2' fill='none' stroke='%239ccfd8' stroke-width='2' stroke-dasharray='3 2'/%3E%3Cpath d='M12 15v7h2' stroke='%23c4a7e7' stroke-width='2' fill='none'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 <script>try { const t = localStorage.theme; if (t) document.documentElement.dataset.theme = t; } catch {}</script>
-<script defer src="app.js?v=4"></script>
+<script defer src="app.js?v=5"></script>
 
 <p class="early"><b>Early version.</b> Edit mode is new: expect rough edges, and tell us about them on <a href="https://github.com/pltanton/d2-live/issues">GitHub</a>.</p>
 
@@ -34,24 +34,27 @@
     <p class="lede">A live preview for <a href="https://d2lang.com">D2</a> diagrams that you can also edit. Whatever writes the <code>.d2</code> file, the picture follows; press <kbd>E</kbd> and the picture writes back — by exactly the lines you changed.</p>
     <p class="cta"><a class="btn primary" href="#install">Install</a> <a class="btn" href="https://github.com/pltanton/d2-live">GitHub</a></p>
   </div>
-  <figure class="win carousel">
-    <figcaption>
-      <i></i><i></i><i></i>
-      <span class="tabs">
-        <button type="button" class="on"><b>View</b><u></u></button>
-        <button type="button"><b>Export</b><u></u></button>
-        <button type="button"><b>Edit</b><u></u></button>
-      </span>
-    </figcaption>
-    <div class="screen">
-      <video data-src="videos/view" muted playsinline preload="none" class="on"></video>
-      <video data-src="videos/export" muted playsinline preload="none"></video>
-      <video data-src="videos/edit" muted playsinline preload="none"></video>
+  <div class="carousel">
+    <figure class="win">
+      <figcaption><i></i><i></i><i></i><span>127.0.0.1 · order-fsm.d2</span></figcaption>
+      <div class="screen">
+        <video data-src="videos/view" muted playsinline preload="auto" class="on"></video>
+        <video data-src="videos/export" muted playsinline preload="auto"></video>
+        <video data-src="videos/edit" muted playsinline preload="auto"></video>
+        <div class="progress"><i></i></div>
+      </div>
+      <div class="captions">
+        <p class="on">The file changes and the picture redraws. Pan, zoom, switch the layout engine or sketch mode on the fly.</p>
+        <p>Copy the diagram as a PNG or an SVG straight into a doc or a chat, or download it.</p>
+        <p>Press <kbd>E</kbd>: click a state, connect it to another, rename it — the code next to it changes with you.</p>
+      </div>
+    </figure>
+    <div class="dots" role="tablist" aria-label="Clips">
+      <button type="button" class="on" aria-label="Viewer"></button>
+      <button type="button" aria-label="Export"></button>
+      <button type="button" aria-label="Edit mode"></button>
     </div>
-    <p class="caption">The file changes and the picture redraws. Pan, zoom, switch the layout engine or sketch mode on the fly.</p>
-    <p class="caption" hidden>Copy the diagram as a PNG or an SVG straight into a doc or a chat, or download it.</p>
-    <p class="caption" hidden>Press <kbd>E</kbd>: click a state, connect it to another, rename it — the code next to it changes with you.</p>
-  </figure>
+  </div>
 </section>
 
 <section class="features" id="features">
