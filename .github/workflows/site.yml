@@ -32,8 +32,6 @@ jobs:
           WANTED: ${{ github.event.client_payload.ref || inputs.ref }}
         run: |
           ref=$WANTED
-          # Edit mode, which every scene records, is only on this branch until a release.
-          ref=${ref:-edit-mode}
           if [[ -z $ref ]]; then
             ref=$(git ls-remote --tags --sort=-v:refname https://github.com/pltanton/d2-live 'v*' \
               | grep -v '\^{}' | head -1 | sed 's|.*refs/tags/||')
@@ -53,7 +51,12 @@ jobs:
           cache-dependency-path: d2-live/go.sum
 
       - name: Record
-        run: D2LIVE_SRC=d2-live ./record.sh
+        run: D2LIVE_SRC=d2-live ./record.sh hero
+
+      - name: Story
+        run: |
+          (cd d2-live && go build -o "$RUNNER_TEMP/d2-live" .)
+          D2LIVE="$RUNNER_TEMP/d2-live" node build/story.mjs
 
       - name: Assemble
         run: |

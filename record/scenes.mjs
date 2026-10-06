@@ -61,6 +61,7 @@ async function clickText(page, sel, text, ms) {
   const p = await page.evaluate((sel, text) => {
     const el = [...document.querySelectorAll(sel)].find((e) => e.textContent.trim() === text || e.textContent.includes(text));
     if (!el) return null;
+    el.scrollIntoView({block: 'center'});
     const b = el.getBoundingClientRect();
     return {x: b.left + Math.min(b.width / 2, 120), y: b.top + b.height / 2};
   }, sel, text);
