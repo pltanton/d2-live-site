@@ -1,0 +1,76 @@
+name: site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "d2-live ref to record (default: latest v* tag, else main)"
+        required: false
+  repository_dispatch:
+    types: [d2-live-release]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pick the d2-live ref
+        id: ref
+        env:
+          WANTED: ${{ github.event.client_payload.ref || inputs.ref }}
+        run: |
+          ref=$WANTED
+          # Edit mode, which every scene records, is only on this branch until a release.
+          ref=${ref:-edit-mode}
+          if [[ -z $ref ]]; then
+            ref=$(git ls-remote --tags --sort=-v:refname https://github.com/pltanton/d2-live 'v*' \
+              | grep -v '\^{}' | head -1 | sed 's|.*refs/tags/||')
+          fi
+          echo "ref=${ref:-main}" >>"$GITHUB_OUTPUT"
+          echo "recording d2-live ${ref:-main}"
+
+      - uses: actions/checkout@v4
+        with:
+          repository: pltanton/d2-live
+          ref: ${{ steps.ref.outputs.ref }}
+          path: d2-live
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: d2-live/go.mod
+          cache-dependency-path: d2-live/go.sum
+
+      - name: Record
+        run: D2LIVE_SRC=d2-live ./record.sh
+
+      - name: Assemble
+        run: |
+          rm -rf site/videos
+          mkdir site/videos
+          cp videos/*.mp4 videos/*.jpg site/videos/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

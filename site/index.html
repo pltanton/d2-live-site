@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>d2-live</title>
+<meta name="description" content="A live preview for D2 diagrams that you can also edit: click a state, rename it, wire a transition, and the .d2 file changes by exactly those lines.">
+<meta property="og:title" content="d2-live — draw it, see the code change">
+<meta property="og:description" content="Live preview for D2 with a visual edit mode. Your editor, your agent and the diagram all write the same file.">
+<meta property="og:url" content="https://d2-live.pltanton.dev/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://d2-live.pltanton.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23232136'/%3E%3Crect x='6' y='7' width='12' height='8' rx='2' fill='none' stroke='%23c4a7e7' stroke-width='2'/%3E%3Crect x='14' y='18' width='12' height='8' rx='2' fill='none' stroke='%239ccfd8' stroke-width='2' stroke-dasharray='3 2'/%3E%3Cpath d='M12 15v7h2' stroke='%23c4a7e7' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css?v=1">
+<script>try { const t = localStorage.theme; if (t) document.documentElement.dataset.theme = t; } catch {}</script>
+<script defer src="app.js?v=1"></script>
+
+<header>
+  <a class="brand" href="#top"><i class="mark"></i>d2-live</a>
+  <nav>
+    <a href="#features">Features</a>
+    <a href="#deep">Under the hood</a>
+    <a href="#install">Install</a>
+    <a class="star" href="https://github.com/pltanton/d2-live" aria-label="d2-live on GitHub"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>Star<span class="count" hidden></span></a>
+    <button class="theme" aria-label="Switch theme"><svg viewBox="0 0 16 16" width="14" height="14"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
+  </nav>
+</header>
+
+<main>
+
+<section class="hero" id="top">
+  <div class="pitch">
+    <p class="eyebrow">D2 · state machines · any editor · Claude Code</p>
+    <h1>Draw it. <span>Watch the code <em>change.</em></span></h1>
+    <p class="lede">d2-live keeps a diagram open next to your work and redraws it the moment the <code>.d2</code> file changes — whether you, your editor or your agent wrote it. Press <kbd>E</kbd> and the picture becomes editable: click a state, rename it, wire a transition, and the file changes by exactly those lines.</p>
+    <p class="cta"><a class="btn primary" href="#install">Install</a> <a class="btn" href="https://github.com/pltanton/d2-live">GitHub</a></p>
+  </div>
+  <figure class="win"><figcaption><i></i><i></i><i></i><span>127.0.0.1 · order-fsm.d2</span></figcaption><video data-src="videos/hero" muted playsinline loop preload="none"></video></figure>
+</section>
+
+<section id="features" class="flow">
+  <article class="step">
+    <div class="node active">
+      <small>state 01</small>
+      <h2>Point at it, see its code</h2>
+      <p>Click a state or a transition and its declaration lights up in the code panel, with every other mention dimmer. Put the cursor on a line and the diagram answers back. A diagram of forty states stops being a scavenger hunt.</p>
+    </div>
+    <figure class="win"><figcaption><i></i><i></i><i></i><span>click · cursor in code</span></figcaption><video data-src="videos/select" muted playsinline loop preload="none"></video></figure>
+  </article>
+  <p class="edge"><span>then</span></p>
+  <article class="step">
+    <div class="node pause">
+      <small>state 02</small>
+      <h2>Change it on the diagram</h2>
+      <p>Rename a state and every transition follows. Switch its class from a menu that shows the colours. Hit <kbd>→</kbd>, click the target, type the event — a transition. Click empty canvas instead and you get a new state already wired in. Each change flashes in the code as a diff, and <kbd>⌘Z</kbd> takes it back.</p>
+    </div>
+    <figure class="win"><figcaption><i></i><i></i><i></i><span>→ connect · class menu · ⌘Z</span></figcaption><video data-src="videos/diagram" muted playsinline loop preload="none"></video></figure>
+  </article>
+  <p class="edge"><span>or</span></p>
+  <article class="step">
+    <div class="node active">
+      <small>state 03</small>
+      <h2>Or just type</h2>
+      <p>The code panel is a real editor. The preview renders what you type, not what is saved, so half a line never lands in the file — <kbd>⌘S</kbd> writes it. While the code does not compile, the last good picture stays and the error sits under the line that caused it.</p>
+    </div>
+    <figure class="win"><figcaption><i></i><i></i><i></i><span>live preview · ⌘S save</span></figcaption><video data-src="videos/code" muted playsinline loop preload="none"></video></figure>
+  </article>
+  <p class="edge"><span>meanwhile</span></p>
+  <article class="step">
+    <div class="node done">
+      <small>state 04</small>
+      <h2>Your editor and your agent keep the pen</h2>
+      <p>The file is the only source of truth. Edits from Helix, a <code>git checkout</code> or Claude Code stream into the open tab and flash where they landed. If one races your unsaved typing, you choose: take theirs or keep yours.</p>
+    </div>
+    <figure class="win"><figcaption><i></i><i></i><i></i><span>external edit · conflict</span></figcaption><video data-src="videos/external" muted playsinline loop preload="none"></video></figure>
+  </article>
+</section>
+
+<section class="deep" id="deep">
+  <p class="eyebrow">Under the hood</p>
+  <h2>Small, fast, and polite to your files</h2>
+  <div class="cards">
+    <div class="node active">
+      <h3>Diffs a human would write</h3>
+      <p>Edits are byte-level splices on the D2 syntax tree, not a reformat. Renaming a state touches its declaration and the transitions that mention it — nothing else moves.</p>
+<pre class="diff"><span class="h">@@ -14 +14 @@</span>
+<span class="d">-PAYMENT_CAPTURED: {class: active}</span>
+<span class="a">+PAID: {class: active}</span>
+ SHIPPED: {class: active}
+<span class="h">@@ -24 +24 @@</span>
+<span class="d">-PAYMENT_PENDING -> PAYMENT_CAPTURED: "payment: CAPTURED" {class: evt}</span>
+<span class="a">+PAYMENT_PENDING -> PAID: "payment: CAPTURED" {class: evt}</span></pre>
+    </div>
+    <div class="node pause">
+      <h3>Fast where it matters</h3>
+      <p>Layout and rendering run in-process with a warm ELK, so a redraw is a fraction of a second, and panning moves a ready picture instead of repainting every label.</p>
+      <dl class="nums"><div><dt>0.23 s</dt><dd>ELK redraw of a 12-state FSM</dd></div><div><dt>0</dt><dd>forced layouts per pan</dd></div><div><dt>0 B</dt><dd>of editor code until you press E</dd></div></dl>
+    </div>
+    <div class="node active">
+      <h3>One server, every diagram</h3>
+      <p>The first <code>d2-live</code> becomes the server; later calls just add files to it. Point it at a directory and every <code>*.d2</code> lands in the tab's file list. Layout engine and sketch mode switch in place.</p>
+      <pre>d2-live docs/diagrams</pre>
+    </div>
+    <div class="node active">
+      <h3>Opens from your editor</h3>
+      <p>Attach <code>d2-live --lsp</code> as a language server: opening a <code>.d2</code> file opens its preview, closing the editor stops the server. No keybindings.</p>
+<pre>[language-server.d2-live]
+command = "d2-live"
+args = ["--lsp"]</pre>
+    </div>
+  </div>
+</section>
+
+<section class="install" id="install">
+  <h2>Install</h2>
+  <div class="two">
+    <div class="node active">
+      <h3>With Nix</h3>
+      <p>The flake builds the binary; SVG rendering is built in, PNG export uses the <code>d2</code> CLI if you have it.</p>
+      <pre>nix profile install github:pltanton/d2-live</pre>
+      <p>Then:</p>
+      <pre>d2-live diagram.d2</pre>
+    </div>
+    <div class="node pause">
+      <h3>For Claude Code</h3>
+      <p>The plugin teaches Claude to register the diagrams it writes and hand you the preview link instead of re-running the server after every edit.</p>
+      <pre>/plugin marketplace add pltanton/d2-live
+/plugin install d2-live</pre>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>The recordings run the real d2-live in a browser driven by a script, so every take is the same. Cursor and key badges are drawn on top for the video.</p>
+  <p><a href="https://github.com/pltanton/d2-live">GitHub</a></p>
+</footer>
